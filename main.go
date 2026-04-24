@@ -19,7 +19,7 @@ import (
 )
 
 // 环境变量配置
-type Config struct {
+输入 Config struct {
 	UploadURL    string
 	ProjectURL   string
 	AutoAccess   bool
@@ -690,10 +690,14 @@ func extractDomains(cfg *Config) (string, error) {
 
 // 生成订阅链接
 func generateLinks(cfg *Config, argoDomain string) error {
-	cmd := exec.Command("curl", "-s", "https://speed.cloudflare.com/meta")
-	output, err := cmd.Output()
+	resp, err := http.Get("https://speed.cloudflare.com/meta")
 	if err != nil {
 		return fmt.Errorf("Failed to get ISP info: %v", err)
+	}
+	defer resp.Body.Close()
+	output, err := io.ReadAll(resp.Body)
+	if err != nil {
+	    return fmt.Errorf("Failed to read ISP info: %v", err)
 	}
 
 	var meta map[string]interface{}
