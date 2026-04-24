@@ -19,7 +19,7 @@ import (
 )
 
 // 环境变量配置
-输入 Config struct {
+type Config struct {
 	UploadURL    string
 	ProjectURL   string
 	AutoAccess   bool
